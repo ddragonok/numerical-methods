@@ -3,6 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Initial data
+a = -2
+b = -2
+c = -4
 eps = 0.001
 N_x = 10
 N_y = 10
@@ -11,14 +14,21 @@ l_y = math.pi/2
 h_x = l_x / N_x
 h_y = l_y / N_y
 
-first = (1/(h_x*h_x)) + (2/h_x)
-second = (1/(h_y*h_y)) + (2/h_y)
-dev = (2/(h_x*h_x)) + (2/(h_y*h_y)) + (2/h_x) + (2/h_y) - 4
+first = (1/(h_x*h_x)) - (a/h_x)
+second = (1/(h_y*h_y)) - (b/h_y)
+dev = (2/(h_x*h_x)) + (2/(h_y*h_y)) - (a/h_x) - (b/h_y) + c
 
-u = np.zeros((N_x + 1, N_y + 1))  # Finite-difference mesh
+u_mesh = np.zeros((N_x + 1, N_y + 1))  # Finite-difference mesh
 
 
-def create_u():
+def draw_u(u):
+    x = [h_x * i for i in range(N_x + 1)]
+    for i in range(N_y + 1):  # Graph of each y-layer
+        plt.plot(x, u[:, i])
+    plt.show()
+
+
+def create_u(u):
     for i in range(N_x + 1):  # Boundary conditions for x
         u[i][0] = math.exp(-(i*h_x)) * math.cos(i*h_x)
         u[i][N_y] = 0
@@ -48,11 +58,7 @@ def create_u():
             u_prev = u.copy()
 
     print(np.around(u, 3))
-
-    x = [h_x * i for i in range(N_x + 1)]
-    for i in range(N_y + 1):  # Graph of each y-layer
-        plt.plot(x, u[:, i])
-    plt.show()
+    draw_u(u)
 
 
-create_u()
+create_u(u_mesh)

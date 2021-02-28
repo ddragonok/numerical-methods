@@ -22,9 +22,59 @@ u_mesh = np.zeros((N_x + 1, N_y + 1))  # Finite-difference mesh
 
 
 def draw_u(u):
-    x = [h_x * i for i in range(N_x + 1)]
-    for i in range(N_y + 1):  # Graph of each y-layer
-        plt.plot(x, u[:, i])
+    x = [h_x * i for i in range(N_x + 1)] * (N_y + 1)
+    y = np.zeros((N_x + 1) * (N_y + 1))
+    i = 0
+    j = 0
+    while i < (N_x + 1) * (N_y + 1):
+        y[i] = h_y * j
+        i += 1
+        if i % (N_x + 1) == 0:
+            j += 1
+
+    z = np.zeros((N_x + 1) * (N_y + 1))
+    k = 0
+    n = 0
+    for i in range((N_x + 1) * (N_y + 1)):
+        z[i] = u[n][k]
+        n += 1
+        if n % (N_x + 1) == 0:
+            n = 0
+            k += 1
+
+    x2 = np.zeros((N_x + 1) * (N_y + 1))
+    i = 0
+    j = 0
+    while i < (N_x + 1) * (N_y + 1):
+        x2[i] = h_x * j
+        i += 1
+        if i % (N_y + 1) == 0:
+            j += 1
+
+    y2 = [h_y * i for i in range(N_y + 1)] * (N_x + 1)
+
+    z2 = np.zeros((N_x + 1) * (N_y + 1))
+    i = 0
+    j = 0
+    r = 0
+    while r < (N_x + 1) * (N_y + 1):
+        z2[r] = z[i * (N_x + 1) + j]
+        r += 1
+        i += 1
+        if r % (N_y + 1) == 0:
+            i = 0
+            j += 1
+
+    ax = plt.axes(projection="3d")
+    ax.set_xlabel('x')
+    ax.set_ylabel('t')
+    ax.set_zlabel('u')
+    for i in range(N_y + 1):
+        ax.plot3D(x[(N_x + 1) * i:(N_x + 1) * (i + 1)], y[(N_x + 1) * i:(N_x + 1) * (i + 1)], z[(N_x + 1) * i:(N_x + 1) * (i + 1)],
+                  'blue')
+    for i in range(N_x + 1):
+        ax.plot3D(x2[(N_y + 1) * i:(N_y + 1) * (i + 1)], y2[(N_y + 1) * i:(N_y + 1) * (i + 1)],
+                  z2[(N_y + 1) * i:(N_y + 1) * (i + 1)], 'blue')
     plt.show()
 
 

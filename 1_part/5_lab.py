@@ -3,19 +3,19 @@ import matplotlib.pyplot as plt
 
 inp_x = [-1, 0, 1, 2, 3, 4]
 inp_y = [-0.5, 0, 0.5, 0.86603, 1, 0.86603]
-N = len(inp_x)
+N = len(inp_x) - 1
 
 
 def draw_graph(n, a_coef):
     count = 100
     x = []
     y = []
-    f = 0
-    h = (inp_x[N - 1] - inp_x[0]) / count
-    for i in range(count):
+    h = (inp_x[N] - inp_x[0]) / count
+    for i in range(count + 1):
+        f = 0
         x.append(inp_x[0] + h*i)
         for j in range(n + 1):
-            f += a_coef[j]*pow(x[-1], j)
+            f += a_coef[j] * pow(x[-1], j)
         y.append(f)
     plt.plot(x, y)
     plt.show()
@@ -57,13 +57,13 @@ def create_matrix(x, y, n):
     summa2 = 0
     for i in range(n + 1):
         for k in range(n + 1):
-            for j in range(N):
+            for j in range(N + 1):
                 summa1 += pow(x[j], k + i)
                 summa2 += y[j] * pow(x[j], k)
             a[i][k] = summa1
             if i == 0:
                 b[k] = summa2
-    print('Матрица коэффициентов для n =', n)
+    print('Coefficient matrix for n =', n)
     print(a, '\n', b)
     gauss(n, a, b)
 
